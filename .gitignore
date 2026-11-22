@@ -20,6 +20,9 @@ __pycache__/
 app.log
 *.tmp
 *.zip
+dist/
+build/
+*.spec
 
 # Editor / IDE / Agent metadata
 .agents/

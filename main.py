@@ -12,28 +12,33 @@ Responsibilities:
 import os
 import sys
 
-# Guarantee working directory is the script directory
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Guarantee working directory is the script directory (or PyInstaller bundle directory)
+if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+    SCRIPT_DIR = sys._MEIPASS
+else:
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 os.chdir(SCRIPT_DIR)
 if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
 
-# Auto-re-execute inside .venv if invoked via system Python
-_VENV_PY = os.path.join(SCRIPT_DIR, ".venv", "Scripts", "python.exe")
-if not os.path.isfile(_VENV_PY):
-    _VENV_PY = os.path.join(SCRIPT_DIR, ".venv", "bin", "python")
+# Auto-re-execute inside .venv if invoked via system Python (skip if compiled binary)
+if not getattr(sys, "frozen", False):
+    _VENV_PY = os.path.join(SCRIPT_DIR, ".venv", "Scripts", "python.exe")
+    if not os.path.isfile(_VENV_PY):
+        _VENV_PY = os.path.join(SCRIPT_DIR, ".venv", "bin", "python")
 
-if os.path.isfile(_VENV_PY):
-    _cur = os.path.abspath(sys.executable).lower()
-    _tgt = os.path.abspath(_VENV_PY).lower()
-    if _cur != _tgt:
-        import subprocess
-        try:
-            sys.exit(subprocess.call([_VENV_PY] + sys.argv))
-        except SystemExit as _se:
-            raise _se
-        except Exception:
-            pass
+    if os.path.isfile(_VENV_PY):
+        _cur = os.path.abspath(sys.executable).lower()
+        _tgt = os.path.abspath(_VENV_PY).lower()
+        if _cur != _tgt:
+            import subprocess
+            try:
+                sys.exit(subprocess.call([_VENV_PY] + sys.argv))
+            except SystemExit as _se:
+                raise _se
+            except Exception:
+                pass
 
 import logging
 import threading
@@ -98,7 +103,7 @@ def _load_sounds() -> dict | None:
             pass
         mixer.init()
         sounds = {}
-        base = os.path.join(os.path.dirname(__file__), "sounds")
+        base = os.path.join(SCRIPT_DIR, "sounds")
         for name, fname in [("flip", "flip.wav"), ("match", "match.wav"), ("win", "win.wav")]:
             path = os.path.join(base, fname)
             if os.path.isfile(path):
@@ -257,7 +262,7 @@ class MemoryMatchApp(ctk.CTk):
         """Show the main game screen for a logged-in user."""
         self.current_user = user
 
-        images_dir = os.path.join(os.path.dirname(__file__), "images")
+        images_dir = os.path.join(SCRIPT_DIR, "images")
 
         # Ensure images dir exists
         if not os.path.isdir(images_dir):

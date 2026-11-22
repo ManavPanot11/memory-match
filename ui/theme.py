@@ -179,6 +179,9 @@ _FONT_PRESETS: dict[str, tuple[int, str]] = {
 
 def _fonts_dir() -> str:
     """Return the absolute path to the fonts/ directory next to this file's package."""
+    import sys
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, "fonts")
     here = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(os.path.dirname(here), "fonts")
 
