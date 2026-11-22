@@ -1,0 +1,29 @@
+# Environments and secrets
+.env
+.env.local
+.env.development
+.env.production
+.env.*
+!.env.example
+.venv/
+env/
+venv/
+ENV/
+
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs and runtime artifacts
+*.log
+app.log
+*.tmp
+*.zip
+
+# Editor / IDE / Agent metadata
+.agents/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
