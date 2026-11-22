@@ -4,6 +4,9 @@ A polished, vibrant desktop tile-matching / memory card game built with Python, 
 
 Created by **[Manav Panot](https://github.com/ManavPanot11)**.
 
+🎮 **[Play Live Web Version on Vercel](https://memory-match-web-one.vercel.app)**  
+💾 **[Download Windows Executable (.exe)](https://github.com/ManavPanot11/memory-match/releases/tag/v1.0.0)**
+
 ---
 
 ## Features
